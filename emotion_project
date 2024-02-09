@@ -10,10 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.svm import SVC
 import os
-for dirname, _, filenames in os.walk('/kaggle/input'):
-    for filename in filenames:
-        print(os.path.join(dirname, filename))
-        df = pd.read_csv('/kaggle/input/voicegender/voice.csv')
+df = pd.read_csv('voice.csv')
 df.head()
 df.describe()
 df.info()
@@ -25,17 +22,11 @@ xData=df.iloc[:,:-1]
 yData=df.iloc[:,-1]
 xData.shape, yData.shape
 TRAINSPLIT = 0.8
-
 xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(xData, yData, train_size=TRAINSPLIT)
 xTrain.shape, yTrain.shape
 plt.figure(figsize=(18, 8))
 plt.subplot(1, 2, 1)
-df.label.value_counts().plot(kind="pie",
-                                           fontsize=16,
-                                           labels=["Male", "Female"],
-                                           ylabel="Male vs Female",
-                                           autopct='%1.1f%%');
-
+df.label.value_counts().plot(kind="pie",fontsize=16,labels=["Male", "Female"],ylabel="Male vs Female",autopct='%1.1f%%');
 plt.subplot(1, 2, 2)
 sns.countplot(x="label",data=df, palette="pastel")
 plt.show()
@@ -50,11 +41,8 @@ for i in range(1, len(indices)):
 sns.barplot(x=corr, y=labels, palette='pastel')
 plt.title('Correlation coefficient between different features and Label')
 plt.show()
-
-# Distribution of meanfun in our data
 plt.figure(figsize=(20,8))
 sns.histplot(df.meanfun, color=sns.color_palette('pastel')[0])
-plt.show()
 plt.show()
 regressionModel = LogisticRegression(solver='liblinear')
 regressionModel.fit(xTrain,yTrain)
@@ -71,4 +59,5 @@ indices = ['Logistic Regression', 'KNN', 'GPC']
 scores = pd.DataFrame({'Training Score': trainScores,'Testing Score': testScores}, index=indices)
 plot = scores.plot.bar(figsize=(16, 8), rot=0, color=['#df6589ff', '#3c1053ff'])
 plt.title('Training and Testing Scores')
-plt.show() 
+plt.show()
+scores
